@@ -67,6 +67,7 @@
     -webkit-text-fill-color: white;
     padding:1px;
     width: auto;
+    position: relative;
     text-align: center;
     
 }

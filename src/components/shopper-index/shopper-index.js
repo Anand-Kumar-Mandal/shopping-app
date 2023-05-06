@@ -61,7 +61,7 @@ export function ShopperIndex() {
         <div className="container-fluid" >
             <BrowserRouter>
             
-                <header className=" header ">
+                <header className="header fixed" style={{background:'#e6ffff'}}>
                 <div ><h2 className="p-2 logo"  >Shopper<span style={{color:'#e6b800'}}>.</span></h2></div>
                     <nav className="header-button d-flex" >
                         <div ><Link to='/home' className='btn btnhead'>Home</Link></div>

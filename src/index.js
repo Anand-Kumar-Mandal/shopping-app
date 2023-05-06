@@ -9,14 +9,17 @@ import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
 import { CookiesProvider } from 'react-cookie';
 import { ShopperIndex } from './components/shopper-index/shopper-index';
+import { SearchProvider } from './context/search';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
  <CookiesProvider>
-     <Provider store={store}>
+     
+      <Provider store={store}>
       <ShopperIndex />
       </Provider>
+     
   </CookiesProvider>
   </React.StrictMode>
 );

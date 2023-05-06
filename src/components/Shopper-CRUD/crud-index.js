@@ -13,30 +13,37 @@ export function CrudIndex() {
     const nav = useNavigate();
     const [cookie, setCookie, removeCookie] = useCookies();
     useEffect(() => {
-        if (cookie["UserId"] == undefined) {
+        if (cookie["email"] == undefined) {
             nav("/login");
         }
         axios({
             method: 'get',
-            url: `http://127.0.0.1:5000/products`
+            url: `/products/get`
         })
             .then(response => {
                 setProducts(response.data);
             })
     }, []);
     //trash button function
-    function handleTrash(e) {
-        var flag = window.confirm("Are you sure\n Want to Delete?");
+   async function handleTrash(e) {
+        try {
+            var flag = window.confirm("Are you sure\n Want to Delete?");
            
         if (flag == true) {
-            axios({
-                method: 'delete',
-                url:`http://127.0.0.1:5000/deleteproduct/${parseInt(e.currentTarget.value)}`
-            })
-            alert("Record Deleted");
-            nav("/home");
+            const res = await axios.delete(`/products/delete/${e.currentTarget.value}`);
+            const data=await res.json();
+            if (data) {
+                alert(data.message)
+                nav('/products');
+            } else {
+                alert(data.error);
+            }
+            
         }
+        } catch (err) {
+            console.log(err);
         }
+    }
 
     return (
         <div className="container-fluid">
@@ -57,16 +64,16 @@ export function CrudIndex() {
                 <tbody>
                     {
                         products.map(product =>
-                            <tr key={product.id}>   
+                            <tr key={product._id}>   
                                 <td className='crud-index-prod-title'>{product.title}</td>
 
                                 <td className='text-center'><img src={product.image} width='50px' height='50px' /></td>
 
-                                <td  className='text-center'><Button variant="contained" color="success" href={'/cruddetails/' + product.id}><OpenInNewIcon style={{ color: 'white' }} /></Button></td>
+                                <td  className='text-center'><Button variant="contained" color="success" href={'/cruddetails/' + product._id}><OpenInNewIcon style={{ color: 'white' }} /></Button></td>
                                 
-                                <td  className='text-center'><Button variant="contained" color="warning" href={'/crudedit/' + product.id}><EditIcon style={{color:'white'}} /></Button></td>
+                                <td  className='text-center'><Button variant="contained" color="warning" href={'/crudedit/' + product._id}><EditIcon style={{color:'white'}} /></Button></td>
 
-                                <td  className='text-center'><Button  variant="contained" style={{backgroundColor:'red'}} onClick={handleTrash} value={product.id}><DeleteForeverIcon style={{color:'white'}}/></Button></td>
+                                <td  className='text-center'><Button  variant="contained" style={{backgroundColor:'red'}} onClick={handleTrash} value={product._id}><DeleteForeverIcon style={{color:'white'}}/></Button></td>
                             </tr>)
                     }
                 </tbody>

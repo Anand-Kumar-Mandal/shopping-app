@@ -5,9 +5,10 @@ import * as yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Payments } from "./payments";
 export function CheckOut() {
     const state = useSelector((state) => state.store.cartItems)
-    const [address, setAddress] = useState({ name: '',mobile: 91,pincode: 0,state: '',address: '',locality: '',district: '',});
+    const [address, setAddress] = useState({ name: '',mobile: 91,pincode: 0,state: '',address: '',locality: '',district: ''});
     const navigate = useNavigate();
     const [sum, setSum] = useState(0);
      
@@ -21,26 +22,10 @@ export function CheckOut() {
                 })
         setSum(parseInt(amount));  
     }
-     
-//for payment method
-    const [component, setComponent] = useState();
-    function handleSelection(e) {
-        if (e.target.value == "card") {
-            setComponent(<Card/>)
-        }
-        else if (e.target.value == "upi") {
-            setComponent(<UPI/>)
-        }
-        else if (e.target.value == "cod") {
-            setComponent(<COD/>)
-        } else {
-            setComponent(<div>Select payment Method</div>)
-        }
-    }
-    function orderDone() {
-        alert("Order submitted\n Your order will be deliver soon.");
-        navigate('/home');
-    }
+     //address
+    const[proceedBtn,setProceedBtn]=useState(true)
+    
+
     return (
         <>
             <div className="container-fluid ">
@@ -50,14 +35,13 @@ export function CheckOut() {
                         <Formik
                             initialValues={{
                                 name: '',
-                                mobile: 91,
+                                mobile: 0,
                                 pincode: 0,
                                 state: '',
                                 address: '',
                                 locality: '',
                                 district: '',
                                 
-                            
                             }}
                             validationSchema={
                                 yup.object({
@@ -73,11 +57,12 @@ export function CheckOut() {
                             onSubmit={
                                 (values) => {
                                     setAddress(values);
-                                
+                                    setProceedBtn(false);
+                                    
                                 }
                             }
                         >
-                            <Form className='form-box'>
+                            <Form className='bg-light m-3 p-4 shadow '>
                                 
                                 <label className="form-label">Full Name</label>
                                 <div ><Field className='input-box form-control w-50' name='name' type='text' /></div>
@@ -108,11 +93,11 @@ export function CheckOut() {
                        </Formik>
                      </div>
 
-                <div className="col-4 total">
+                <div className='col-4 h-50 mt-5 bg-light shadow'>
                         <h4>Total checkout </h4>
                         {
                         state.map(product =>
-                            <div key={product.id} className='d-flex justify-content-between' >   
+                            <div key={product._id} className='d-flex justify-content-between' >   
                                 <div className='text-center'><img src={product.image} width='50px' height='50px'  /></div>
 
                                 <div>₹{product.price}</div>
@@ -126,9 +111,10 @@ export function CheckOut() {
                         </div>
                         <hr className="horizontal" />
                         <div>Address</div>
-                        <div>{address.address.toUpperCase()}</div>
+                        <div className='mb-2'>{address.address.toUpperCase()}</div>
+                        <Payments amount={sum} product={state} proceed={proceedBtn} addressdata={address} ></Payments>
                         <hr className="horizontal" />
-                        <div>Payment Method</div>
+                        {/* <div>Payment Method</div>
                         <select className="w-100 h-2 form-select" onChange={handleSelection}>
                         <option value='-1'>Choose any one</option>
                             <option value='card'>Card</option>
@@ -140,7 +126,7 @@ export function CheckOut() {
                         </div>
                         <div className="d-flex justify-content-end align-item-bottom">
                         <button className="darkbtn form-control" onClick={orderDone}>Proceed for payment</button>
-                        </div>
+                        </div> */}
                     </div>
                     
                 </div>

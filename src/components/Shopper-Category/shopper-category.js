@@ -61,12 +61,12 @@ export function ShopperCategory() {
  
 
     useEffect(() => {
-        if (cookie["UserId"] == undefined) {
+        if (cookie["email"] == undefined) {
             navigate("/login");
         }
         axios({
             method: 'get',
-            url: `http://127.0.0.1:5000/products/category/${params.catName}`
+            url: `/products/category/${params.catName}`
             
         }).then((response) => {
             setProducts(response.data);
@@ -91,7 +91,7 @@ export function ShopperCategory() {
             {
                     products.map(product =>
                         <div className="card m-3 p-2" key={product.id} style={{ width: '280px' }}>
-                            <Link to={'/details/' + product.id}>
+                            <Link to={'/details/' + product._id}>
                             <img src={product.image} height='180px' width='100px' className="card-img-top" />
                             </Link>
                             <div className='fav-share-icon'>
@@ -109,8 +109,18 @@ export function ShopperCategory() {
                             </div>
                             {/* footer cart button */}
                             <div className='card-footer d-flex justify-content-between mt-auto'>
-                            <Rating className='mt-2' size="small" value={product.rating.rate} readOnly />
-                                <Button size='small' variant='contained' value={product.id} onClick={() => { buyNowClick(product.id) }} style={{ backgroundColor: 'black' }}>Buy Now</Button>
+                                
+                                <Button size='small' variant='contained' value={product._id} onClick={() => { buyNowClick(product._id) }} style={{ backgroundColor: 'black' }}>Buy Now</Button>
+                                <Rating className='mt-2' size="small" key={product._id} defaultValue={() => {
+                                    var sum=0;
+                                    var count=0;
+                                    product.usersRating.map(rat => {
+                                        sum = sum + rat.rate;
+                                        count = count + 1;
+                                    })
+                                    return parseInt(sum/count);
+                                }}
+                                readOnly /> 
                             </div>
 
                         </div>
@@ -118,6 +128,7 @@ export function ShopperCategory() {
                         )
                 }
             </div>
+            
         </div>
     )
 }

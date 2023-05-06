@@ -40,14 +40,15 @@ box-shadow: 3px 3px #7abdbd ;
 
 .carousel-container{
     width:100%;
-    height:400px;
+    height:350px;
     background: white;
+
 }
 .carousel-img{
 width:100%;
 align-items: center;
 justify-content: center;
-height:400px;
+height: 350px;
 }
 .bottom{
     position: relative;

@@ -47,8 +47,8 @@ export function ShopperCart() {
                 <tbody>
                      {
                         state.map(product =>
-                            <tr key={product.id} >   
-                                <td className='text-center'><img src={product.image} width='50px' height='50px' onClick={()=>{handleClick(product.id)}} /></td>
+                            <tr key={product._id} >   
+                                <td className='text-center'><img src={product.image} width='50px' height='50px' onClick={()=>{handleClick(product._id)}} /></td>
 
                                 <td className='title'>{product.title}</td>
                                 <td  className='text-center'><Button  variant="contained" style={{backgroundColor:'red'}} onClick={()=>{handleTrash(product)}}  value={product.id}><DeleteForeverIcon style={{color:'white'}}/></Button></td>

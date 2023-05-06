@@ -23,40 +23,14 @@ export function ShopperProducts() {
     navigate(`/details/${e}`)
     }
     
-    
-
-    
-    // useEffect(() => {
-    //     if (cookie["UserId"] == undefined) {
-    //         navigate("/login");
-    //     }
-    //     axios({
-    //         method: 'get',
-    //         url: `http://fakestoreapi.com/products/category/${params.catName}`
-            
-    //     }).then((response) => {
-    //         setProducts(response.data);
-    //     })
-    // }, [params.catName]);
-
-    //to know the details of clickekd product
-    // useEffect(() => {
-    //     axios({
-    //         method: 'get',
-    //         url: `http://127.0.0.1:5000/details/${params:id}`
-    //     }).then(response => {
-    //         setFavStyle(response.data);
-    //     })
-    // }, []);
- 
 
     useEffect(() => {
-        if (cookie["UserId"] == undefined) {
+        if (cookie["email"] == undefined) {
             navigate("/login");
         }
         axios({
             method: 'get',
-            url: `http://127.0.0.1:5000/products`
+            url: `/products/get`
             
         }).then((response) => {
             setProducts(response.data);
@@ -70,7 +44,7 @@ export function ShopperProducts() {
             {
                     products.map(product =>
                         <div className="card m-3 p-2" key={product.id} style={{ width: '280px' }}>
-                            <Link to={'/details/' + product.id}>
+                            <Link to={'/details/' + product._id}>
                             <img src={product.image} height='180px' width='100px' className="card-img-top" />
                             </Link>
                             <div className='fav-share-icon'>
@@ -84,8 +58,18 @@ export function ShopperProducts() {
                             </div>
                             {/* footer cart button */}
                             <div className='card-footer d-flex justify-content-between mt-auto'>
-                            <Rating className='mt-2' size="small" value={product.rating.rate} readOnly />
-                                <Button size='small' variant='contained' value={product.id} onClick={() => { buyNowClick(product.id) }} style={{ backgroundColor: 'black' }}>Buy Now</Button>
+                                <Rating className='mt-2' size="small" key={product._id} defaultValue={() => {
+                                    var sum=0;
+                                    var count=0;
+                                    product.usersRating.map(rat => {
+                                        sum = sum + rat.rate;
+                                        count = count + 1;
+                                    })
+                                    return sum / count;
+                                }}
+                                readOnly /> 
+                                
+                                <Button size='small' variant='contained' value={product._id} onClick={() => { buyNowClick(product._id) }} style={{ backgroundColor: 'black' }}>Buy Now</Button>
                             </div>
 
                         </div>
